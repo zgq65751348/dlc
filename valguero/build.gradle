@@ -1,0 +1,8 @@
+
+dependencies {
+    compile("org.springframework.data:spring-data-mongodb")
+    compile("org.springframework.boot:spring-boot-starter-webflux")
+    compile("org.mongodb:mongodb-driver-reactivestreams:4.4.0")
+    compile("io.projectreactor:reactor-core:3.3.0.RELEASE")
+}
+

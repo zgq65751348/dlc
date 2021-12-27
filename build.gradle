@@ -1,0 +1,111 @@
+
+/*
+buildscript {
+    ext {
+        springbootversion = '2.3.7.RELEASE'
+        springcloudversion = 'Hoxton.SR9'
+        springcloudalibabaversion = '2.2.2.RELEASE'
+    }
+    repositories {
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        //用来打包
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springbootversion}")
+    }
+}
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+ //   apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    //下面两句必须在所有子项目中添加，否则导致import了看起来没问题，但是编译时找不到其他模块的类。
+    group 'com.ark'
+    version '1.0-RELEASE'
+
+    repositories {
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        jcenter()
+        mavenCentral()
+    }
+    //指定编码格式
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+}
+
+//设定当前模块项目中的配置
+subprojects {
+    dependencies {
+      //  implementation "org.springframework.boot:spring-boot-starter-web"
+        implementation 'org.projectlombok:lombok:1.18.16'
+    }
+}
+*/
+
+buildscript {
+    ext {
+        springbootversion = '2.3.7.RELEASE'
+        springcloudversion = 'Hoxton.SR9'
+        zipkinVersion = '2.10.1'
+        springbootAdminVersion = '2.0.1'
+        druidVersion = '1.1.10'
+        thMybatisMapperVersion = '2.1.5'
+        pagehelperVersion = '1.2.10'
+        sqliteJdbcVersion = '3.27.2'
+        lombokVersion = '1.16.20'
+        jacksonVersion = '2.9.6'
+        swagger2Version = '2.8.0'
+        servletVersion = '3.1.0'
+    }
+    repositories {
+        mavenLocal()
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springbootversion}")
+    }
+}
+allprojects {
+    group 'com.ark'
+    version '1.0-RELEASE'
+    apply plugin: 'java'
+    sourceCompatibility = 11
+    targetCompatibility = 11
+    //指定编码格式
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
+    repositories {
+        mavenLocal()
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        mavenCentral()
+    }
+}
+
+subprojects {
+ println(name)
+    // 指定编码
+  [compileJava,compileTestJava,javadoc]*.options*.encoding = 'UTF-8'
+    dependencies {
+      compile('org.projectlombok:lombok:1.18.16')
+    }
+    //dependency-management 插件
+    apply plugin: 'io.spring.dependency-management'
+    dependencyManagement {
+        imports {
+            //spring bom helps us to declare dependencies without specifying version numbers.
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springcloudversion}"
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springbootversion}"
+        }
+    }
+    jar {
+        manifest.attributes provider: 'gradle'
+    }
+}
